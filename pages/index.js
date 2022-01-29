@@ -1,36 +1,12 @@
 import appConfig from '../config.json';
+import React, { useState } from 'react';
+import {useRouter} from 'next/router'
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 
-function GlobalStyle(){
-    return(
-        <style global jsx>{`
-        * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      `}</style>
-    );
-}
+
 
 function Titulo(props){
-    console.log(props);
+    //console.log(props);
     const Tag = props.tag || 'h1';
    
     return(
@@ -61,11 +37,14 @@ function Titulo(props){
   
 
 export default function PaginaInicial() {
-    const username = 'dehvieira';
+   // const username = 'dehvieira';
+   const [username, setUsername] = useState("");
+   const router = useRouter();
+  
   
     return (
       <>
-        <GlobalStyle />
+       
         <Box
           styleSheet={{
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -89,9 +68,16 @@ export default function PaginaInicial() {
               backgroundColor: appConfig.theme.colors.neutrals[700],
             }}
           >
+
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={ (event) => {
+                event.preventDefault();
+                router.push('/chat')
+                
+              }}
+
               styleSheet={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -102,17 +88,31 @@ export default function PaginaInicial() {
                 {appConfig.name}
               </Text>
   
-              <TextField
-                fullWidth
-                textFieldColors={{
-                  neutral: {
-                    textColor: appConfig.theme.colors.neutrals[200],
-                    mainColor: appConfig.theme.colors.neutrals[900],
-                    mainColorHighlight: appConfig.theme.colors.primary[500],
-                    backgroundColor: appConfig.theme.colors.neutrals[800],
-                  },
+
+
+              {/* <input
+                  type="text"
+                  
+                  }}
+              /> */}
+
+
+               <TextField
+                  value={username}
+                  onChange={(event) =>{
+                    const valor = event.target.value;
+                    setUsername(valor);
                 }}
-              />
+                 fullWidth
+                 textFieldColors={{
+                   neutral: {
+                     textColor: appConfig.theme.colors.neutrals[200],
+                     mainColor: appConfig.theme.colors.neutrals[900],
+                     mainColorHighlight: appConfig.theme.colors.primary[500],
+                     backgroundColor: appConfig.theme.colors.neutrals[800],
+                   },
+                 }}
+               />
               <Button
                 type='submit'
                 label='Entrar'
@@ -121,7 +121,7 @@ export default function PaginaInicial() {
                   contrastColor: appConfig.theme.colors.neutrals["000"],
                   mainColor: appConfig.theme.colors.primary[500],
                   mainColorLight: appConfig.theme.colors.primary[400],
-                  mainColorStrong: appConfig.theme.colors.primary[600],
+                  mainColorStrong: appConfig.theme.colors.primary[200],
                 }}
               />
             </Box>
@@ -161,7 +161,7 @@ export default function PaginaInicial() {
                   borderRadius: '1000px'
                 }}
               >
-                {appConfig.fullname}
+                {username}
               </Text>
             </Box>
             {/* Photo Area */}
